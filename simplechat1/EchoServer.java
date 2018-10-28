@@ -3,22 +3,23 @@
 // license found at www.lloseng.com 
 
 import java.io.*;
+import common.ChatIF;
 import ocsf.server.*;
 
 /**
  * This class overrides some of the methods in the abstract 
  * superclass in order to give more functionality to the server.
  *
- * @author Dr Timothy C. Lethbridge
- * @author Dr Robert Lagani&egrave;re
  * @author Fran&ccedil;ois B&eacute;langer
- * @author Paul Holden
- * @version July 2000
+ * @author Dr Timothy C. Lethbridge  
+ * @author Dr Robert Lagani&egrave;re
  */
 public class EchoServer extends AbstractServer 
 {
   //Class variables *************************************************
   
+	ChatIF serverUI;
+	
   /**
    * The default port to listen on.
    */
@@ -36,6 +37,17 @@ public class EchoServer extends AbstractServer
     super(port);
   }
 
+  /**
+   * Constructs an instance of the echo server.
+   *
+   * @param port The port number to connect on.
+   * @param serverUI The interface type variable.
+   */
+  public EchoServer(int port, ChatIF serverUI) throws IOException
+  {
+    super(port);
+    this.serverUI = serverUI;
+  }
   
   //Instance methods ************************************************
   
@@ -99,7 +111,7 @@ public class EchoServer extends AbstractServer
     // a series of if statements
 
     if (message.equalsIgnoreCase("#quit"))
-      quit();
+    	quit();
     else if (message.equalsIgnoreCase("#stop"))
       stopListening();
     else if (message.equalsIgnoreCase("#close"))
@@ -186,6 +198,21 @@ public class EchoServer extends AbstractServer
   {
     System.out.println
       ("Server has stopped listening for connections.");
+  }
+  
+  /**
+   * This method terminates the server.
+   */
+  public void quit()
+  {
+    try
+    {
+      close();
+    }
+    catch(IOException e)
+    {
+    }
+    System.exit(0);
   }
   
   //Class methods ***************************************************
